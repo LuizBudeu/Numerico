@@ -1,2 +1,6 @@
 # Numerico
-Repositório das tarefas da disciplina MAP3122 - Métodos Numéricos e Aplicações
+Repositório das tarefas da disciplina MAP3122 - Métodos Numéricos e Aplicações.
+
+Alunos:
+ - Luiz Guilherme Budeu, NUSP: 11821639
+ - Vinícius
