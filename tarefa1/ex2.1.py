@@ -8,7 +8,7 @@ def f(y, t):
 
 # Initial condition
 y0 = 1
-T = 1
+T = 2
 t0 = 0
 
 n = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
@@ -18,7 +18,7 @@ solution = []
 
 def tabela(n):
 
-    y_T = [] # Armazenara a aprox de y(T) para os n casos distintos
+    y_T = [] # Armazena a aprox de y(T) para os n casos distintos
     
     for i in range(len(n)):
         p = 0
@@ -56,7 +56,7 @@ def euler(y, t, h):
 
 
 a = tabela(n)
-with open('ex2.txt', 'w') as f:
+with open('ex2.1.txt', 'w') as f:
 
     for i in range(len(a)):
         print("%5d & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3]))
