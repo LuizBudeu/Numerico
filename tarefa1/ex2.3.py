@@ -49,8 +49,8 @@ def tabela(n):
             
             e0 = abs((y_T[i-1][0]-y_T[i][0]))
             e1 = abs((y_T[i-1][1]-y_T[i][1]))
-            e = max(e0, e1)
-        
+            e = math.sqrt(e0**2 + e1**2)
+            
         i_solution = (n[i], h[i], e, p)
         solution.append(i_solution)
     return solution
@@ -61,7 +61,7 @@ def euler(X, t, h):
         X[i,:] = X[i-1,:] + h * f(X[i-1,:], t[i-1])
 
 a = tabela(n)
-with open('tarefa1/ex2.2.txt', 'w') as f:
+with open('tarefa1/ex2.3.txt', 'w') as f:
 
     for i in range(len(a)):
         print("%5d & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3]))

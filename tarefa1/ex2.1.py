@@ -56,7 +56,7 @@ def euler(y, t, h):
 
 
 a = tabela(n)
-with open('ex2.1.txt', 'w') as f:
+with open('tarefa1/ex2.1.txt', 'w') as f:
 
     for i in range(len(a)):
         print("%5d & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3]))
