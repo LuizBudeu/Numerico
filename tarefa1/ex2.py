@@ -11,25 +11,28 @@ y0 = 1
 T = 1
 t0 = 0
 
-n = [128, 256, 512, 1024, 2048, 4096, 8192, 16384]
+n = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
 h = [(T-t0)/i for i in n]
 
-
 solution = []
+
 def tabela(n):
+
+    y_T = [] # Armazenara a aprox de y(T) para os n casos distintos
     
     for i in range(len(n)):
         p = 0
         
         # Time points
-        t = np.arange(t0, T, h[i])
+        t = np.linspace(t0, T, num=n[i]+1) # Para incluir T
         y = np.zeros(len(t))
         y[0] = y0
-        
+
         euler(y, t, h[i])
+        y_T.append(y[-1]) # Pega as estimativas de y(T) para cada n  
         
         if i > 0:
-            q = abs((exact(T)-y[i-1])/(exact(T)-y[i]))
+            q = abs((exact(T)-y_T[i-1])/(exact(T)-y_T[i]))
             r = h[i-1]/h[i]
             p = math.log(q)/math.log(r)
         
@@ -49,7 +52,6 @@ def error(y, t):
 def euler(y, t, h):
     for i in range(1, len(t)):
         y[i] = y[i-1] + h * f(y[i-1], t[i-1])  
-            
             
 
 
