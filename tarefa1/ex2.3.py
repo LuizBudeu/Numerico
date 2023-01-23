@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import math
 
@@ -53,12 +54,22 @@ def tabela(n):
             
         i_solution = (n[i], h[i], e, p)
         solution.append(i_solution)
+    gerar_graf(t, X)
     return solution
 
 # Euler's method
 def euler(X, t, h):
     for i in range(1, len(t)):
         X[i,:] = X[i-1,:] + h * f(X[i-1,:], t[i-1])
+
+def gerar_graf(t_n, y_n):
+    plt.plot(t_n, y_n[:,0], ':', color='black', label = 'presas')
+    plt.plot(t_n, y_n[:,1], '-.', color='black', label = 'predadores')
+    plt.xlabel('tempo [meses]')
+    plt.ylabel('Populacão das espécies [indivíduos]')
+    plt.title('Modelo populacional de Lotka-Volterra')
+    plt.legend()
+    plt.show()
 
 a = tabela(n)
 with open('tarefa1/ex2.3.txt', 'w') as f:
