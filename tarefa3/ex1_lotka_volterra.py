@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # Initial condition
 X0 = np.array([100, 50])
 t0 = 0
-T = 300
+T = 150
 
 n = [pow(2, i) for i in range(4,16)]
 h = [(T - t0)/i for i in n]
@@ -51,7 +51,7 @@ def tabela(n):
     y_T = [] # Armazena a aprox de y(T) para os n casos distintos
     
     for i in range(len(n)):
-        p = e = 0
+        p = e = q = 0
         
         # Time points
         t = np.linspace(t0, T, num=n[i]+1) # Para incluir T
@@ -64,6 +64,7 @@ def tabela(n):
         if i > 0:
             q0 = abs((y_T[i-2][0]-y_T[i-1][0])/(y_T[i-1][0]-y_T[i][0]))
             q1 = abs((y_T[i-2][1]-y_T[i-1][1])/(y_T[i-1][1]-y_T[i][1]))
+            q = max(q0, q1)
             r = h[i-1]/h[i]
             p0 = math.log(q0)/math.log(r)
             p1 = math.log(q1)/math.log(r)
@@ -73,7 +74,7 @@ def tabela(n):
             e1 = abs((y_T[i-1][1]-y_T[i][1]))
             e = math.sqrt(e0**2 + e1**2)
             
-        i_solution = (n[i], h[i], e, p)
+        i_solution = (n[i], h[i], e, q, p)
         solution.append(i_solution)
         
         if i == len(n) - 1:
@@ -101,8 +102,8 @@ def gerar_graf(t_n, y_1, y_2):
 
 a = tabela(n)
 
-with open('tarefa3/ex1_depurado.txt', 'w') as f:
+with open('tarefa3/ex1_presapredador.txt', 'w') as f:
 
     for i in range(len(a)):
-        print("%5d & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3]))
-        f.write("%5d & %9.3e & %9.3e & %9.3e \\\\ \n" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3]))
+        print("%5d & %9.3e & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3], solution[i][4]))
+        f.write("%5d & %9.3e & %9.3e & %9.3e & %9.3e \\\\ \n" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3], solution[i][4]))
