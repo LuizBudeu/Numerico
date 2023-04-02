@@ -3,54 +3,6 @@ import matplotlib.pyplot as plt
 from constants import *
 
 
-# # Condições iniciais
-# S0 = 10E6 - 1
-# I0 = 1
-# R0 = 0
-
-# # Equações diferenciais
-# def SIR_model(t, y, beta, gamma):
-#     S, I, R = y
-#     dSdt = -beta*S*I
-#     dIdt = beta*S*I - gamma*I
-#     dRdt = gamma*I
-#     return np.array([dSdt, dIdt, dRdt])
-
-# # Parâmetros
-# beta = 0.4
-# gamma = 0.1
-
-# # Intervalo de tempo
-# t = np.linspace(0, 100, 1)
-
-# # Número de pontos
-# n = len(t)
-
-# # Função que calcula os valores dos pontos usando o método dos trapézios
-# def trapezoidal(f, a, b, n, y0):
-#     h = (b - a) / float(n)
-#     w = np.zeros((n, len(y0)))
-#     w[0] = y0
-#     for i in range(1, n):
-#         w[i] = w[i-1] + h/2 * (f(t[i-1], w[i-1], beta, gamma) + f(t[i], w[i-1] + h*f(t[i-1], w[i-1], beta, gamma), beta, gamma))
-#     return  w
-
-# # Implementando o método dos trapézios para resolver o modelo SIR
-# y = trapezoidal(SIR_model, 0, 100, n, np.array([S0, I0, R0]))
-
-# print(y)
-
-# # Plotando os resultados
-# plt.plot(range(0, 100), y[:,0], label='Suscetíveis')
-# plt.plot(range(0, 100), y[:,1], label='Infectados')
-# plt.plot(range(0, 100), y[:,2], label='Recuperados')
-# plt.xlabel('Tempo')
-# plt.ylabel('Número de Indivíduos')
-# plt.title('Modelo SIR com o Método dos Trapézios')
-# plt.legend()
-# plt.show()
-
-
 def SIR_model(Y, t):
     S, I, R = Y
     dotS = -Lambda * S * I / N
