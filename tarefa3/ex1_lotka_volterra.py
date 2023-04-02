@@ -2,6 +2,16 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Initial condition
+X0 = np.array([100, 50])
+t0 = 0
+T = 150
+
+n = [pow(2, i) for i in range(4,16)]
+h = [(T - t0)/i for i in n]
+
+solution = []
+
 # Differential equation
 def f(X, t):
     x, y = X
@@ -9,17 +19,12 @@ def f(X, t):
     b = 0.001
     c = 0.02
     d = 0.00006
+    
     dx = a*x - b*x*y
     dy = -c*y + d*x*y
+    
     return np.array([dx, dy])
 
-# Exact solution
-def exact(t):
-    return np.exp(t)*np.sin(t)
-
-# function to compute the error
-def error(y, t):
-    return abs(y - exact(t))
 
 # Euler's method
 def euler_implicito(y, t, h):
@@ -29,12 +34,11 @@ def euler_implicito(y, t, h):
     return y
 
 
-def succesive_aprox(y_ant, t, h, max_iter = 100, precisao = 1E-12):
+def succesive_aprox(y_ant, t, h, max_iter = 100, precisao = 1E-10):
    
     y_guess = y_ant
 
     for i in range(max_iter):
-        # Phi de Newton
         y_next_guess = y_ant + h*f(y_guess, t)
         if abs(np.linalg.norm(y_next_guess) - np.linalg.norm(y_guess)) < precisao:
             break
@@ -42,27 +46,64 @@ def succesive_aprox(y_ant, t, h, max_iter = 100, precisao = 1E-12):
 
     return y_next_guess
 
+def tabela(n):
+
+    y_T = [] # Armazena a aprox de y(T) para os n casos distintos
+    
+    for i in range(len(n)):
+        p = e = q = 0
+        
+        # Time points
+        t = np.linspace(t0, T, num=n[i]+1) # Para incluir T
+        y = np.zeros((len(t),2))
+        y[0,:] = X0
+
+        euler_implicito(y, t, h[i])
+        y_T.append(y[-1]) # Pega as estimativas de y(T) para cada n  
+        
+        if i > 0:
+            q0 = abs((y_T[i-2][0]-y_T[i-1][0])/(y_T[i-1][0]-y_T[i][0]))
+            q1 = abs((y_T[i-2][1]-y_T[i-1][1])/(y_T[i-1][1]-y_T[i][1]))
+            q = max(q0, q1)
+            r = h[i-1]/h[i]
+            p0 = math.log(q0)/math.log(r)
+            p1 = math.log(q1)/math.log(r)
+            p = max(p0, p1)
+            
+            e0 = abs((y_T[i-1][0]-y_T[i][0]))
+            e1 = abs((y_T[i-1][1]-y_T[i][1]))
+            e = math.sqrt(e0**2 + e1**2)
+            
+        i_solution = (n[i], h[i], e, q, p)
+        solution.append(i_solution)
+        
+        if i == len(n) - 1:
+            gerar_graf(t, y[:,0], y[:,1])
+
+    return solution
+
+
 def gerar_graf(t_n, y_1, y_2):
+    # Presas
     plt.plot(t_n, y_1, ':', color='black', label = 'presas')
-    plt.plot(t_n, y_2, color='black', label = 'predadores')
     plt.xlabel('tempo [meses]')
-    plt.ylabel('Populacão das espécies [indivíduos]')
+    plt.ylabel('Populacão de presas [indivíduos]')
+    plt.title('Modelo populacional de Lotka-Volterra')
+    plt.legend()
+    plt.show()
+    # Predadores
+    plt.plot(t_n, y_2, '-.',color='black', label = 'predadores')
+    plt.xlabel('tempo [meses]')
+    plt.ylabel('Populacão de predadores [indivíduos]')
     plt.title('Modelo populacional de Lotka-Volterra')
     plt.legend()
     plt.show()
 
-# Initial condition
-X0 = np.array([200, 50])
-t0 = 0
-T = 300
 
-selector = 1
+a = tabela(n)
 
-n = 8192
-h = (T-t0)/n
-t = np.linspace(t0, T, num=n+1)
-y_n = [X0] * (n+1)  # initial condition
+with open('tarefa3/ex1_presapredador.txt', 'w') as f:
 
-euler_implicito(y_n, t, h)
-yn = np.array(y_n)
-gerar_graf(t, yn[:,0], yn[:,1])
+    for i in range(len(a)):
+        print("%5d & %9.3e & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3], solution[i][4]))
+        f.write("%5d & %9.3e & %9.3e & %9.3e & %9.3e \\\\ \n" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3], solution[i][4]))

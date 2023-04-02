@@ -7,11 +7,10 @@ X0 = np.array([1, 0])
 t0 = 0
 T = 2 * np.pi
 
-solution = []
-
 n = [pow(2,i) for i in range(4,16)]
 h = [(T-t0)/i for i in n]
 
+solution = []
 
 # Differential equation
 def f(X, t):
@@ -39,7 +38,6 @@ def succesive_aprox(y_ant, t, h, max_iter = 100, precisao = 1E-12):
     y_guess = y_ant
 
     for _ in range(max_iter):
-        # Phi de Newton
         y_next_guess = y_ant + h*f(y_guess, t)
         if abs(np.linalg.norm(y_next_guess) - np.linalg.norm(y_guess)) < precisao:
             break
@@ -83,11 +81,18 @@ def tabela(n):
     return solution
 
 def gerar_graf(t_n, y_1, y_2):
+    # y_1
     plt.plot(t_n, y_1, ':', color='black', label = r'$y_1(t) = x(t)$')
+    plt.xlabel('tempo [s]')
+    plt.ylabel(r'$Valores\ \ \ y(t) = (y_1(t), y_2(t))$')
+    plt.title(r'Depuração por Solução Manufaturada:  $\frac{d^2}{dx^2}x(t) = -x(t)$' )
+    plt.legend()
+    plt.show()
+    # y_2
     plt.plot(t_n, y_2, '-.',color='black', label = r'$y_2(t) = \frac{d}{dx}x(t)$')
     plt.xlabel('tempo [s]')
     plt.ylabel(r'$Valores\ \ \ y(t) = (y_1(t), y_2(t))$')
-    plt.title(r'Depuração por Solução Manufaturada:  $\frac{d^2}{dx^2}x(t) = -x(t)$' ,)
+    plt.title(r'Depuração por Solução Manufaturada:  $\frac{d^2}{dx^2}x(t) = -x(t)$')
     plt.legend()
     plt.show()
 
