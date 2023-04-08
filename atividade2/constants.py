@@ -2,7 +2,7 @@
 N = 10E6  
 
 # Número inicial de indivíduos infectados e recuperados
-I0, R0 = 1., 0  
+I0, R0 = 1, 0  
 
 # Número inicial de indivíduos suscetíveis a infecção
 S0 = N - I0 - R0 
