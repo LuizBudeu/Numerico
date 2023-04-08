@@ -48,11 +48,12 @@ def tabela(n):
         y = trapezios(Y0, t, h[i])
         y_T.append(y[-1])
         
-        p = e = 0
-        if i > 1:
+        p = e = q =  0
+        if i > 0:
             q0 = abs((y_T[i-2][0] - y_T[i-1][0]) / (y_T[i-1][0] - y_T[i][0]))
             q1 = abs((y_T[i-2][1] - y_T[i-1][1]) / (y_T[i-1][1] - y_T[i][1]))
             q2 = abs((y_T[i-2][2] - y_T[i-1][2]) / (y_T[i-1][2] - y_T[i][2]))
+            q = min(q0,q1,q2)
             r = h[i-1]/h[i]
       
             p0 = math.log(q0)/math.log(r)
@@ -65,11 +66,14 @@ def tabela(n):
             e2 = abs((y_T[i-1][2]-y_T[i][2]))
             e = math.sqrt(e0**2 + e1**2 + e2**2)
 
-        i_solution = (n[i], h[i], e, p)
+        i_solution = (n[i], h[i], e, q, p)
         solution.append(i_solution)
 
         if i == len(n) - 1:
-            print(e0,e1,e2)
+            print('Estimativa - Erros finais')
+            print('{:.5e} {:.5e} {:.5e}'.format(e0, e1, e2), end ='\n\n')
+            print('Estimativas - Ordens de convergência finais')
+            print('{:.5f} {:.5f} {:.5f}'.format(p0, p1, p2), end ='\n\n')
             gerar_grafico_indiv(t, y)
             gerar_grafico_conj(t, y)
 
@@ -82,7 +86,7 @@ def gerar_grafico_indiv(t_n, y_n):
         plt.plot(t_n, y_n[:,index], '--', color="black", label=f"{var}")
         plt.grid()
         plt.xlabel("Tempo, $t$ [dias]")
-        plt.ylim(-0.02E7,1.02E7)
+        plt.ylim(-0.02*N, 1.02*N)
         plt.ylabel("População")
         plt.legend(loc = "best")
         plt.show()
@@ -94,7 +98,6 @@ def gerar_grafico_conj(t_n, y_n):
     plt.plot(t_n, y_n[:,2], '--', color="black", label='Recuperados')
     plt.grid()
     plt.xlabel("Tempo, $t$ [dias]")
-    plt.ylim(-0.02E7,1.02E7)
     plt.ylabel("População")
     plt.legend(loc = "best")
     plt.show()
@@ -104,6 +107,6 @@ a = tabela(n)
 with open('atividade2/sir.txt', 'w') as f:
 
     for i in range(len(solution)):
-        print("%5d & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3]))
-        f.write("%5d & %9.3e & %9.3e & %9.3e \\\\ \n" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3]))
+        print("%5d & %9.3e & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3], solution[i][4]))
+        f.write("%5d & %9.3e & %9.3e & %9.3e & %9.3e \\\\ \n" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3], solution[i][4]))
 
