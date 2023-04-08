@@ -40,7 +40,8 @@ solution= []
 def tabela(n):
 
     y_T = [] # Armazena a aprox de y(T) para os n casos distintos
-    
+    y_all = []
+    t_all = []
     for i in range(len(n)):        
         # Time points
         t = np.linspace(t0, T, num=n[i]+1) # Para incluir T
@@ -76,12 +77,14 @@ def tabela(n):
             print('{:.5f} {:.5f} {:.5f}'.format(p0, p1, p2), end ='\n\n')
             gerar_grafico_indiv(t, y)
             gerar_grafico_conj(t, y)
-
+        if i < 6:
+            t_all.append(t)
+            y_all.append(y)
+    return y_all, t_all
 
 
 def gerar_grafico_indiv(t_n, y_n):
-    state_var = ['Suscetiveis', 'Infectados', 'Recuperados']
-    for index, var in enumerate(state_var):
+    for index, var in enumerate(STATE_VAR):
         plt.title(f"Modelo SIR - {var} - Método do Trapézio")
         plt.plot(t_n, y_n[:,index], '--', color="black", label=f"{var}")
         plt.grid()
@@ -102,7 +105,24 @@ def gerar_grafico_conj(t_n, y_n):
     plt.legend(loc = "best")
     plt.show()
 
-a = tabela(n)
+def gerar_grafico_aproxs(t_all, y, var_index):
+    
+    for i, t in enumerate(t_all):
+        plt.plot(t, y[i], '-.', color='black',label=f"{2**(i+4)} partições")
+    plt.title(f"Convergência da curva de {STATE_VAR[var_index]} - 16 a 512 partições")
+    plt.grid()
+    plt.xlabel("Tempo, $t$ [dias]")
+    plt.ylim(-0.02*N, 1.02*N)
+    plt.ylabel("População")
+    plt.show()
+
+yal, tal = tabela(n)
+varsolutions = [[],[],[]]
+
+for j in range(len(yal[0][0])):
+    for i in range(len(yal)):
+        varsolutions[j].append(yal[i][:,j])
+    gerar_grafico_aproxs(tal, varsolutions[j], j)
 
 with open('atividade2/sir.txt', 'w') as f:
 

@@ -11,7 +11,8 @@ S0 = N - I0 - R0
 Lambda, gamma = 0.4, 0.1  
 
 # Vetor de condições iniciais
-Y0 = S0, I0, R0  
+Y0 = S0, I0, R0
+STATE_VAR = ['Suscetíveis', 'Infectados', 'Recuperados']
 
 # Intervalo de tempo
 T = 160
