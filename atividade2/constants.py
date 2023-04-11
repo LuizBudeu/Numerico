@@ -8,7 +8,7 @@ I0, R0 = 1, 0
 S0 = N - I0 - R0 
 
 # Força de infecção e taxa de recuperação
-Lambda, gamma = 0.4, 0.1  
+beta, gamma = 0.4, 0.1  
 
 # Vetor de condições iniciais
 Y0 = S0, I0, R0

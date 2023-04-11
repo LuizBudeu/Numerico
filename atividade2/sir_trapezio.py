@@ -6,8 +6,8 @@ from constants import *
 
 def SIR_model(Y, t):
     S, I, R = Y
-    dotS = -Lambda * S * I / N
-    dotI = Lambda * S * I / N - gamma * I
+    dotS = -beta * S * I / N
+    dotI = beta * S * I / N - gamma * I
     dotR = gamma * I
     return np.array([dotS, dotI, dotR])
 

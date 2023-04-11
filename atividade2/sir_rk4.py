@@ -5,8 +5,8 @@ from constants import *
 
 def SIR_model(Y, t):
     S, I, R = Y
-    dotS = -Lambda * S * I / N
-    dotI = Lambda * S * I / N - gamma * I
+    dotS = -beta * S * I / N
+    dotI = beta * S * I / N - gamma * I
     dotR = gamma * I
     return np.array([dotS, dotI, dotR])
 
@@ -78,4 +78,9 @@ def gerar_grafico(t_n, y_n):
 
 a = tabela(n)
 
+with open('atividade2/sir.txt', 'w') as f:
+
+    for i in range(len(solution)):
+        print("%5d & %9.3e & %9.3e & %9.3e & %9.3e \\\\" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3], solution[i][4]))
+        f.write("%5d & %9.3e & %9.3e & %9.3e & %9.3e \\\\ \n" % (solution[i][0], solution[i][1], solution[i][2], solution[i][3], solution[i][4]))
 
