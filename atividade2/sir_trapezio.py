@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from constants import *
+import json
 
 
 def SIR_model(Y, t):
@@ -44,11 +45,24 @@ def tabela(n):
     t_all = []
     for i in range(len(n)):        
         # Time points
-        t = np.linspace(t0, T, num=n[i]+1) # Para incluir T
+        t = np.linspace(t0, T, num=n[i]+1) # Para incluir T            
 
         y = trapezios(Y0, t, h[i])
         y_T.append(y[-1])
         
+        if i == 1:  # Salvar os pontos para n=32 para ser usado no spline
+            with open('atividade2/splines_pontos/sir_trapezio_32.json', 'w') as f:
+                xs = (np.linspace(t0, T, 32))
+                f.write(json.dumps({x: list(yy) for x, yy in zip(xs, y)}, indent=4))
+        
+        if i == 4:  # Salvar os pontos para n=256 para ser usado no spline
+            with open('atividade2/splines_pontos/sir_trapezio_256.json', 'w') as f:
+                xs = (np.linspace(t0, T, 256))
+                f.write(json.dumps({x: list(yy) for x, yy in zip(xs, y)}, indent=4))
+                
+            # Mostar os valores de y(60) para n=526
+            # print(y[list(t).index(min(t, key=lambda x:abs(x-60)))])
+    
         p = e = q =  0
         if i > 0:
             q0 = abs((y_T[i-2][0] - y_T[i-1][0]) / (y_T[i-1][0] - y_T[i][0]))
@@ -75,7 +89,7 @@ def tabela(n):
             print('{:.5e} {:.5e} {:.5e}'.format(e0, e1, e2), end ='\n\n')
             print('Estimativas - Ordens de convergência finais')
             print('{:.5f} {:.5f} {:.5f}'.format(p0, p1, p2), end ='\n\n')
-            gerar_grafico_indiv(t, y)
+            # gerar_grafico_indiv(t, y)
             gerar_grafico_conj(t, y)
         if i < 6:
             t_all.append(t)

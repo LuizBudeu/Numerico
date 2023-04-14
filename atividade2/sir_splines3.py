@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 
 
 def spline(x, y):
@@ -42,74 +43,53 @@ def eval_spline(x, a, b, c, d, xp):
         yp[idx] = a[i] + b[i]*(xp[idx]-x[i]) + c[i]*(xp[idx]-x[i])**2 + d[i]*(xp[idx]-x[i])**3
     return yp
 
+def main(n):
+    data = json.load(open(f'atividade2/splines_pontos/sir_trapezio_{n}.json', 'r'))
 
-# Dados de exemplo
-x = np.array([0, 1, 2, 3, 4])
-y = np.array([1, 4, 2, 3, 0])
+    x = np.array(list(map(float, data.keys())))
+    y1 = np.array([i[0] for i in data.values()])
+    y2 = np.array([i[1] for i in data.values()])
+    y3 = np.array([i[2] for i in data.values()])
+    xp = np.linspace(0, 160, 10000)
+    
+    if n == 32:
+        plt.plot(x, y1, 'o', color='black', label='Pontos - Suscetíveis')
+        plt.plot(x, y2, 'o', color='black', label='Pontos - Infectados')
+        plt.plot(x, y3, 'o', color='black', label='Pontos - Recuperados')
+        
+    a, b, c, d = spline(x, y1)
+    yp = eval_spline(x, a, b, c, d, xp)
+    plt.plot(xp, yp, ':', color="black", label='Splines - Suscetíveis')
+    
+    print_y_60(x, a, b, c, d)
 
-# Calcular os coeficientes de splines
-a, b, c, d = spline(x, y)
+    a, b, c, d = spline(x, y2)
+    yp = eval_spline(x, a, b, c, d, xp)
+    plt.plot(xp, yp, '-.', color="black", label='Splines - Infectados')
+    
+    print_y_60(x, a, b, c, d)
 
-for i in range(len(x)-1):
-    print(f"S{i}(x) = {a[i]} + {b[i]}(x-{x[i]}) + {c[i]}(x-{x[i]})^2 + {d[i]}(x-{x[i]})^3")
-
-
-# Avaliar o polinômio de splines em um conjunto de pontos
-xp = np.linspace(0, len(x)-1, 100)
-yp = eval_spline(x, a, b, c, d, xp)
-
-# Plotar os resultados
-plt.plot(x, y, 'o', label='Dados')
-plt.plot(xp, yp, label='Splines')
-plt.legend()
-plt.show()
-
-
-
-
-# import numpy as np
-
-# def spline_interpolation(x, y):
-#     n = len(x)
-
-#     # Step 1: Define the matrix A and vector b
-#     A = np.zeros((n, n))
-#     b = np.zeros(n)
-#     for i in range(1, n-1):
-#         h1 = x[i] - x[i-1]
-#         h2 = x[i+1] - x[i]
-#         A[i, i-1:i+2] = [h1, 2*(h1+h2), h2]
-#         b[i] = 3*((y[i+1]-y[i])/h2 - (y[i]-y[i-1])/h1)
-
-#     # Step 2: Solve the system of equations for the spline coefficients
-#     c = np.linalg.solve(A, b)
-#     a = y[:-1]
-#     b = (y[1:]-y[:-1])/(x[1:]-x[:-1]) - (2*c[:-1]+c[1:])*np.diff(x)/6
-#     d = (c[1:]-c[:-1])/(6*np.diff(x))
-
-#     # Step 3: Construct the spline function
-#     def spline_function(x_new):
-#         i = np.searchsorted(x, x_new) - 1
-#         dx = x_new - x[i]
-#         return a[i] + b[i]*dx + c[i]*dx**2/2 + d[i]*dx**3
-
-#     return spline_function
+    a, b, c, d = spline(x, y3)
+    yp = eval_spline(x, a, b, c, d, xp)
+    plt.plot(xp, yp, '--', color="black", label='Splines - Recuperados')
+    
+    print_y_60(x, a, b, c, d)
+    
+    plt.grid()
+    plt.legend()
+    plt.xlabel("Tempo, $t$ [dias]")
+    plt.ylabel("População")
+    plt.show()
+    
+    # [1748258.03156101 3891325.09651714 4360416.87192186]
+    
+    
+def print_y_60(x, a, b, c, d):
+    y_60 = eval_spline(x, a, b, c, d, np.linspace(60, 60, 1))
+    print(y_60)
 
 
-# import matplotlib.pyplot as plt
-
-# # Dados de entrada
-# x = np.array([0, 1, 2, 3, 4])
-# y = np.array([0, 1, 4, 9, 16])
-
-# # Interpolação por splines
-# f = spline_interpolation(x, y)
-
-# # Plot da função interpolada
-# x_new = np.linspace(0, 4, 100)
-# y_new = f(x_new)
-
-# plt.plot(x, y, 'o', label='Dados')
-# plt.plot(x_new, y_new, label='Spline')
-# plt.legend()
-# plt.show()
+# ATENCAO: É possível rodar a 'main' para n = 32 ou n = 256; comentar/descomentar
+if __name__ == "__main__":
+    # main(32)
+    main(256)
