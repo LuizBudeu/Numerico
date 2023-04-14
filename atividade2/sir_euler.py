@@ -6,8 +6,8 @@ from constants import *
 
 def SIR_model(Y, t):
     S, I, R = Y
-    dotS = -gamma * S * I / N
-    dotI = gamma * S * I / N - gamma * I
+    dotS = -beta * S * I / N
+    dotI = beta * S * I / N - gamma * I
     dotR = gamma * I
     return np.array([dotS, dotI, dotR])
 
@@ -19,15 +19,6 @@ def Euler(Y0, t, h):
     for i in range(nt-1):
         Y[i+1] = Y[i] + SIR_model(Y[i], t[i]) * h
     return Y
-
-
-# # Exact solution
-# def exact(t):
-#     return np.array([
-#         -0.3*np.e**t + 0.5*np.e**(2*t) + 0.8*np.e**(3*t),
-#         0.3*np.e**t + 0.2*np.e**(3*t),
-#         0.2*np.e**(3*t)
-#     ])
 
 
 def tabela(n):
@@ -68,15 +59,15 @@ def tabela(n):
 
 def gerar_grafico(t_n, y_n):
     plt.title("Método de Euler")
-    plt.plot(t_n, y_n[:,0], color='orange', label='Suscetíveis')
-    plt.plot(t_n, y_n[:,1], color='green', label='Infectados')
-    plt.plot(t_n, y_n[:,2], color='lightblue', label='Recuperados')
+    plt.plot(t_n, y_n[:,0], ':', color='black', label='Suscetíveis')
+    plt.plot(t_n, y_n[:,1], '-.', color='black', label='Infectados')
+    plt.plot(t_n, y_n[:,2], '--', color='black', label='Recuperados')
     plt.grid()
     plt.xlabel("Tempo, $t$ [dias]")
     plt.ylabel("População")
     plt.legend(loc = "best")
 
-    plt.show();
+    plt.show()
 
 
 a = tabela(n)

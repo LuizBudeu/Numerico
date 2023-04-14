@@ -81,8 +81,6 @@ def main(n):
     plt.ylabel("População")
     plt.show()
     
-    # [1748258.03156101 3891325.09651714 4360416.87192186]
-    
     
 def print_y_60(x, a, b, c, d):
     y_60 = eval_spline(x, a, b, c, d, np.linspace(60, 60, 1))
