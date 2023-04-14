@@ -60,8 +60,8 @@ def tabela(n):
                 xs = (np.linspace(t0, T, 256))
                 f.write(json.dumps({x: list(yy) for x, yy in zip(xs, y)}, indent=4))
                 
-            # Mostar os valores de y(60) para n=526
-            # print(y[list(t).index(min(t, key=lambda x:abs(x-60)))])
+            # ATENCAO: se quiser ver o valor de y(60) para n=526, descomente a linha abaixo
+            # print(y[list(t).index(min(t, key=lambda x:abs(x-60)))])  # Mostra os valores de y(60) para n=526
     
         p = e = q =  0
         if i > 0:

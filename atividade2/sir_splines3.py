@@ -50,7 +50,7 @@ def main(n):
     y1 = np.array([i[0] for i in data.values()])
     y2 = np.array([i[1] for i in data.values()])
     y3 = np.array([i[2] for i in data.values()])
-    xp = np.linspace(0, 160, 10000)
+    xp = np.linspace(0, 160, 1000)
     
     if n == 32:
         plt.plot(x, y1, 'o', color='black', label='Pontos - Suscetíveis')
